@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Tasks.Controllers
 {
@@ -6,12 +7,29 @@ namespace Tasks.Controllers
     {
         public IActionResult Index()
         {
-            ViewBag.Name = User.Identity?.Name;
-            ViewBag.IsAuthenticated = User.Identity?.IsAuthenticated;
             return View();
         }
 
-        public IActionResult AccessDenied()
+        [Authorize(Policy ="Manager")]
+        public IActionResult Manager()
+        {
+            return View();
+        }
+
+        [Authorize(Policy ="Admin")]
+        public IActionResult Admin()
+        {
+            return View();
+        }
+
+        [Authorize(Policy ="User")]
+        public IActionResult UserPage()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public IActionResult Privacy()
         {
             return View();
         }

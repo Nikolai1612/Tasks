@@ -12,8 +12,8 @@ using Tasks.Data;
 namespace Tasks.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240520183437_Prod")]
-    partial class Prod
+    [Migration("20240523194510_first")]
+    partial class first
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -177,11 +177,9 @@ namespace Tasks.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")

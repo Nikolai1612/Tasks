@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
-using Tasks.Models;
+using Tasks.Entities;
 
 namespace Tasks.Data
 {
@@ -13,8 +13,8 @@ namespace Tasks.Data
             var user = new ApplicationUser
             {
                 UserName = "Nikolai1612",
-                LastName = "Dzemchyk",
-                FirstName = "Nikolai"
+                //LastName = "Dzemchyk",
+                //FirstName = "Nikolai"
             };
 
             var result = userManager.CreateAsync(user,"Nikolai1612").GetAwaiter().GetResult();

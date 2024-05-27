@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-using Tasks.Models;
+using Tasks.Entities;
 
 namespace Tasks.Data
 {

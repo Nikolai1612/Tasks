@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Tasks.Data;
-using Tasks.Models;
-
+using Tasks.Entities;
 
 namespace Tasks
 {
@@ -13,24 +15,29 @@ namespace Tasks
             var builder = WebApplication.CreateBuilder();
 
             builder.Services.AddControllersWithViews();
-            builder.Services.AddDbContext<ApplicationDbContext>(options => 
-                options.UseSqlServer(builder.Configuration
-                .GetConnectionString("ConnectTasksDatabase")))
-                .AddIdentity<ApplicationUser, ApplicationRole>(option =>
+            builder.Services.AddDbContext<ApplicationDbContext>(SetDbContextOptions);
+            builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(SetIdentityOPtions)
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+            builder.Services.AddAuthorization(SetAuthorizationOptions);
+
+            builder.Services.AddAuthentication()
+                .AddFacebook(config =>
                 {
-                    option.Password.RequireDigit = false;
-                    option.Password.RequireLowercase = false;
-                    option.Password.RequireNonAlphanumeric = false;
-                    option.Password.RequireUppercase = false;
-                    option.Password.RequiredLength = 6;
-                })
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-            builder.Services.ConfigureApplicationCookie(options =>
-            {
-                options.LoginPath = "/Admin/Login";
-                options.AccessDeniedPath = "/Home/AccessDenied";
-            });
-            builder.Services.AddAuthorization(options =>
+                    config.AppId = builder.Configuration["Authentication:Facebook:AppId"];
+                    config.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
+                });
+
+            
+            
+            var app = builder.Build();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.MapDefaultControllerRoute();
+
+            app.Run();
+
+            void SetAuthorizationOptions(AuthorizationOptions options)
             {
                 options.AddPolicy("Admin", builder =>
                 {
@@ -41,16 +48,28 @@ namespace Tasks
                     builder.RequireAssertion(x => x.User.HasClaim(ClaimTypes.Role, "Manager")
                           || x.User.HasClaim(ClaimTypes.Role, "Admin"));
                 });
-            });
-            
-            
-            var app = builder.Build();
-            app.UseAuthentication();
-            app.UseAuthorization();
-            app.MapDefaultControllerRoute();
+                options.AddPolicy("User", builder =>
+                {
+                    builder.RequireAssertion(x => x.User.HasClaim(ClaimTypes.Role, "Manager")
+                          || x.User.HasClaim(ClaimTypes.Role, "Admin") 
+                          || x.User.HasClaim(ClaimTypes.Role,"User"));
+                });
+            }
 
-            app.Run();
+            void SetIdentityOPtions(IdentityOptions options)
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 6;
+            }
 
+            void SetDbContextOptions(DbContextOptionsBuilder options)
+            {
+                options.UseSqlServer(builder.Configuration
+                .GetConnectionString("ConnectTasksDatabase"));
+            }
         }
     }
 }
