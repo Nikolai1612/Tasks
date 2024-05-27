@@ -1,0 +1,34 @@
+name: Deploy ASP.NET Core App to somee.com
+
+on:
+  push:
+    branches:
+      - test
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '8.0.x' # Укажите версию .NET Core, которую используете
+
+    - name: Install dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet publish -c Release -o publish
+
+    - name: Deploy to somee.com via FTP
+      uses: SamKirkland/FTP-Deploy-Action@4.3.0
+      with:
+        ftp-server: ftp://155.254.244.34/www.tasks.somee.com
+        ftp-username: ${{ secrets.FTP_USERNAME }}
+        ftp-password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: publish/
+        server-dir: / # Укажите правильную директорию на сервере
