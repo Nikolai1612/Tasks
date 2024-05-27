@@ -21,12 +21,12 @@ namespace Tasks
                 .AddDefaultTokenProviders();
             builder.Services.AddAuthorization(SetAuthorizationOptions);
 
-            builder.Services.AddAuthentication()
-                .AddFacebook(config =>
-                {
-                    config.AppId = builder.Configuration["Authentication:Facebook:AppId"];
-                    config.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
-                });
+            //builder.Services.AddAuthentication()
+            //    .AddFacebook(config =>
+            //    {
+            //        config.AppId = builder.Configuration["Authentication:Facebook:AppId"];
+            //        config.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
+            //    });
 
             
             
