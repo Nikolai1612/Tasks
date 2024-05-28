@@ -3,7 +3,7 @@ name: Deploy ASP.NET Core App to somee.com
 on:
   push:
     branches:
-      - test
+      - master
 
 jobs:
   build-and-deploy:
@@ -27,8 +27,9 @@ jobs:
     - name: Deploy to somee.com via FTP
       uses: SamKirkland/FTP-Deploy-Action@4.3.0
       with:
-        ftp-server: ftp://155.254.244.34/www.tasks.somee.com
+        ftp-server: ${{ secrets.FTP_SERVER }}
         ftp-username: ${{ secrets.FTP_USERNAME }}
         ftp-password: ${{ secrets.FTP_PASSWORD }}
+        protocol: ftp
         local-dir: publish/
         server-dir: / # Укажите правильную директорию на сервере
