@@ -32,4 +32,4 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         protocol: ftp
         local-dir: publish/
-        server-dir: d:/DZHosts/LocalUser/nd16121997/www.tasks.somee.com/ # Укажите правильную директорию на сервере
+        server-dir: / # Укажите правильную директорию на сервере
