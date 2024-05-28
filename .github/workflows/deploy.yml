@@ -16,7 +16,7 @@ jobs:
     - name: Set up .NET
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '8.0.x' 
+        dotnet-version: '8.0.x' # Укажите вашу версию .NET
 
     - name: Install dependencies
       run: dotnet restore
@@ -27,8 +27,9 @@ jobs:
     - name: Deploy to somee.com via FTP
       uses: SamKirkland/FTP-Deploy-Action@4.3.0
       with:
-        ftp-server: ${{ secrets.FTP_SERVER }}
-        ftp-username: ${{ secrets.FTP_USERNAME }}
-        ftp-password: ${{ secrets.FTP_PASSWORD }}
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        protocol: ftp
         local-dir: publish/
-        server-dir: / 
+        server-dir: d:\DZHosts\LocalUser\nd16121997\www.tasks.somee.com # Укажите правильную директорию на сервере
