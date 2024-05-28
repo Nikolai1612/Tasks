@@ -10,12 +10,6 @@ namespace Tasks.Controllers
             return View();
         }
 
-        [Authorize(Policy ="Manager")]
-        public IActionResult Manager()
-        {
-            return View();
-        }
-
         [Authorize(Policy ="Admin")]
         public IActionResult Admin()
         {
