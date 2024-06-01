@@ -33,3 +33,5 @@ jobs:
         protocol: ftp
         local-dir: publish/
         server-dir: /www.tasks.somee.com/
+      env:
+        ConnectTasksDatabase: ${{ secrets.ConnectTasksDatabase }}

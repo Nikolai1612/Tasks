@@ -67,8 +67,7 @@ namespace Tasks
 
             void SetDbContextOptions(DbContextOptionsBuilder options)
             {
-                options.UseSqlServer(builder.Configuration
-                .GetConnectionString("ConnectTasksDatabase"));
+                options.UseSqlServer(Environment.GetEnvironmentVariable("ConnectTasksDatabase"));
             }
         }
     }

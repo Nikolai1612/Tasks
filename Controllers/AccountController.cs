@@ -54,7 +54,8 @@ namespace Tasks.Controllers
                         await signInManager.SignInAsync(user, isPersistent: false);
                         return Redirect(model.ReturnUrl);
                     }
-                    return View(model.ReturnUrl);
+                    model.Roles = roles;
+                    return View(model);
                 }
 
                 foreach (var error in result.Errors)
@@ -62,7 +63,8 @@ namespace Tasks.Controllers
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
-            return View(model.ReturnUrl);
+            model.Roles = roles;
+            return View(model);
         }
 
         [HttpGet]
