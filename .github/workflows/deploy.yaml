@@ -34,4 +34,4 @@ jobs:
         local-dir: publish/
         server-dir: /www.tasks.somee.com/
       env:
-        ConnectTasksDatabase: ${{ secrets.CONNECT_TASKSDATABASE }}
+        DB_CONNECTION_STRING: ${{ secrets.DB_CONNECTION_STRING }}
