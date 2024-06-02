@@ -68,7 +68,7 @@ namespace Tasks
 
             void SetDbContextOptions(DbContextOptionsBuilder options)
             {
-                Env.Load("./.env");
+                Env.Load(".env");
                 var connectionstring = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
 
                 options.UseSqlServer(connectionstring);
