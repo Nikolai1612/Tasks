@@ -1,8 +1,4 @@
 ﻿﻿<h1>Home</h1>
 <partial name="_Menu" />
-
-@foreach(var a in Environment.GetEnvironmentVariables()) 
-{
-    <h2>@a.ToString()</h2>
-}
+<h2>@Env.GetString("DB_CONNECTION_STRING")</h2>
 <h2>Hello</h2>
