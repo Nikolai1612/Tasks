@@ -1,9 +1,9 @@
-name: Deploy ASP.NET Core App to somee.com
+name: Build and Deploy ASP.NET Core App
 
 on:
   push:
     branches:
-      - test
+      - main
 
 jobs:
   build-and-deploy:
@@ -16,13 +16,21 @@ jobs:
     - name: Set up .NET
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '8.0.x'
+        dotnet-version: '8.x'
 
-    - name: Install dependencies
+    - name: Restore dependencies
       run: dotnet restore
 
     - name: Build
-      run: dotnet publish -c Release -o publish
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Publish
+      run: dotnet publish --configuration Release --no-build --output ./publish
+
+    - name: Create env file
+      run: |
+        echo DB_CONNECTION_STRING=${{ secrets.DB_CONNECTION_STRING }} > ./publish/.env
+
 
     - name: Deploy to somee.com via FTP
       uses: SamKirkland/FTP-Deploy-Action@4.3.0
@@ -33,5 +41,3 @@ jobs:
         protocol: ftp
         local-dir: publish/
         server-dir: /www.tasks.somee.com/
-      env:
-        DB_CONNECTION_STRING: ${{ secrets.DB_CONNECTION_STRING }}
