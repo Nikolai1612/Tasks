@@ -31,6 +31,8 @@ jobs:
       run: |
         echo "DB_CONNECTION_STRING='${{ secrets.DB_CONNECTION_STRING }}'" > ./publish/.env
 
+    - name: Verify env file
+      run: cat ./publish/.env
 
     - name: Deploy to somee.com via FTP
       uses: SamKirkland/FTP-Deploy-Action@4.3.0
@@ -39,5 +41,5 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         protocol: ftp
-        local-dir: publish/
+        local-dir: ./publish
         server-dir: /www.tasks.somee.com/
