@@ -3,7 +3,7 @@ name: Build and Deploy ASP.NET Core App
 on:
   push:
     branches:
-      - main
+      - test
 
 jobs:
   build-and-deploy:
@@ -29,7 +29,7 @@ jobs:
 
     - name: Create env file
       run: |
-        echo DB_CONNECTION_STRING=${{ secrets.DB_CONNECTION_STRING }} > ./publish/.env
+        echo "DB_CONNECTION_STRING='${{ secrets.DB_CONNECTION_STRING }}'" > ./publish/.env
 
 
     - name: Deploy to somee.com via FTP
