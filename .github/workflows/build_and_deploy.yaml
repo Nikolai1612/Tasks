@@ -25,7 +25,7 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: Publish
-      run: dotnet publish --configuration Release --no-restore
+      run: dotnet publish --configuration Release --no-restore publish
 
     - name: Create web.config
       run: |
@@ -64,5 +64,5 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         protocol: ftp
-        local-dir: /
+        local-dir: publish/
         server-dir: /www.tasks.somee.com/
