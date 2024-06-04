@@ -25,7 +25,7 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: Publish
-      run: dotnet publish --configuration Release --no-restore publish
+      run: dotnet publish --configuration Release --no-restore -o publish
 
     - name: Create web.config
       run: |
