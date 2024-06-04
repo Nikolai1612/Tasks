@@ -29,23 +29,23 @@ jobs:
 
     - name: Create web.config
       run: |
-        echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>" > web.config
-        echo "<configuration>" >> web.config
-        echo "  <location path=\".\" inheritInChildApplications=\"false\">" >> web.config
-        echo "    <system.webServer>" >> web.config
-        echo "      <handlers>" >> web.config
-        echo "        <add name=\"aspNetCore\" path=\"*\" verb=\"*\" modules=\"AspNetCoreModuleV2\" resourceType=\"Unspecified\" />" >> web.config
-        echo "      </handlers>" >> web.config
-        echo "      <aspNetCore processPath=\"dotnet\" arguments=\".\Tasks.dll\" stdoutLogEnabled=\"false\" stdoutLogFile=\".\logs\stdout\" hostingModel=\"inprocess\">" >> web.config
-        echo "        <environmentVariables>" >> web.config
-        echo "          <environmentVariable name=\"MySetting\" value=\"MyValue\" />" >> web.config
-        echo "          <environmentVariable name=\"AnotherSetting\" value=\"AnotherValue\" />" >> web.config
-        echo "        </environmentVariables>" >> web.config
-        echo "      </aspNetCore>" >> web.config
-        echo "    </system.webServer>" >> web.config
-        echo "  </location>" >> web.config
-        echo "</configuration>" >> web.config
-        echo "<!--ProjectGuid: BB1997CA-7460-4A16-85A8-879E521560F7-->" >> web.config
+        echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>" > publish/web.config
+        echo "<configuration>" >> publish/web.config
+        echo "  <location path=\".\" inheritInChildApplications=\"false\">" >> publish/web.config
+        echo "    <system.webServer>" >> publish/web.config
+        echo "      <handlers>" >> publish/web.config
+        echo "        <add name=\"aspNetCore\" path=\"*\" verb=\"*\" modules=\"AspNetCoreModuleV2\" resourceType=\"Unspecified\" />" >> publish/web.config
+        echo "      </handlers>" >> publish/web.config
+        echo "      <aspNetCore processPath=\"dotnet\" arguments=\".\Tasks.dll\" stdoutLogEnabled=\"false\" stdoutLogFile=\".\logs\stdout\" hostingModel=\"inprocess\">" >> publish/web.config
+        echo "        <environmentVariables>" >> publish/web.config
+        echo "          <environmentVariable name=\"MySetting\" value=\"MyValue\" />" >> publish/web.config
+        echo "          <environmentVariable name=\"AnotherSetting\" value=\"AnotherValue\" />" >> publish/web.config
+        echo "        </environmentVariables>" >> publish/web.config
+        echo "      </aspNetCore>" >> publish/web.config
+        echo "    </system.webServer>" >> publish/web.config
+        echo "  </location>" >> publish/web.config
+        echo "</configuration>" >> publish/web.config
+        echo "<!--ProjectGuid: BB1997CA-7460-4A16-85A8-879E521560F7-->" >> publish/web.config
 
     - name: Run tests
       run: dotnet test --no-restore --verbosity normal
@@ -55,7 +55,7 @@ jobs:
       with:
         name: web-app
         path: |
-          web.config
+          publish/web.config
 
     - name: Deploy to somee.com via FTP
       uses: SamKirkland/FTP-Deploy-Action@4.3.0
