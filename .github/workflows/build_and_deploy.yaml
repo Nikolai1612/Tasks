@@ -64,5 +64,5 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         protocol: ftp
-        local-dir: publish/
+        local-dir: /
         server-dir: /www.tasks.somee.com/
