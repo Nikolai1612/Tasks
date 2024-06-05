@@ -6,6 +6,7 @@ using Tasks.Data;
 using Tasks.Entities;
 using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
 
 namespace Tasks
 {
@@ -24,7 +25,8 @@ namespace Tasks
 
             builder.Services.AddAuthentication()
                 .AddFacebook(SetFacebookOptions)
-                .AddGoogle(SetGoogleOptions);
+                .AddGoogle(SetGoogleOptions)
+                .AddMicrosoftAccount(SetMicrosoftOptions);
 
             var app = builder.Build();
             app.UseAuthentication();
@@ -78,6 +80,13 @@ namespace Tasks
                 options.ClientId = Environment.GetEnvironmentVariable("GOOGLE_APP_ID");
                 options.ClientSecret = Environment.GetEnvironmentVariable("GOOGLE_APP_SECRET");
             }
+
+            void SetMicrosoftOptions(MicrosoftAccountOptions options)
+            {
+                options.ClientId = Environment.GetEnvironmentVariable("MICROSOFT_APP_ID");
+                options.ClientSecret = Environment.GetEnvironmentVariable("MICROSOFT_APP_SECRET");
+            }
         }
+
     }
 }

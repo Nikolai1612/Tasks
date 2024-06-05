@@ -43,6 +43,8 @@ jobs:
         echo "          <environmentVariable name=\"FACEBOOK_APP_SECRET\" value=\"${{ secrets.FACEBOOK_APP_SECRET }}\" />" >> publish/web.config
         echo "          <environmentVariable name=\"GOOGLE_APP_ID\" value=\"${{ secrets.GOOGLE_APP_ID }}\" />" >> publish/web.config
         echo "          <environmentVariable name=\"GOOGLE_APP_SECRET\" value=\"${{ secrets.GOOGLE_APP_SECRET }}\" />" >> publish/web.config
+        echo "          <environmentVariable name=\"MICROSOFT_APP_ID\" value=\"${{ secrets.MICROSOFT_APP_ID }}\" />" >> publish/web.config
+        echo "          <environmentVariable name=\"MICROSOFT_APP_SECRET\" value=\"${{ secrets.MICROSOFT_APP_SECRET }}\" />" >> publish/web.config
         echo "        </environmentVariables>" >> publish/web.config
         echo "      </aspNetCore>" >> publish/web.config
         echo "    </system.webServer>" >> publish/web.config
