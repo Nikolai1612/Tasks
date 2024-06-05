@@ -38,8 +38,7 @@ jobs:
         echo "      </handlers>" >> publish/web.config
         echo "      <aspNetCore processPath=\"dotnet\" arguments=\".\Tasks.dll\" stdoutLogEnabled=\"false\" stdoutLogFile=\".\logs\stdout\" hostingModel=\"inprocess\">" >> publish/web.config
         echo "        <environmentVariables>" >> publish/web.config
-        echo "          <environmentVariable name=\"MySetting\" value=\"MyValue\" />" >> publish/web.config
-        echo "          <environmentVariable name=\"AnotherSetting\" value=\"AnotherValue\" />" >> publish/web.config
+        echo "          <environmentVariable name=\"DB_CONNECTION_STRING\" value=\"${{ secrets.DB_CONNECTION_STRING }}\" />" >> publish/web.config
         echo "        </environmentVariables>" >> publish/web.config
         echo "      </aspNetCore>" >> publish/web.config
         echo "    </system.webServer>" >> publish/web.config

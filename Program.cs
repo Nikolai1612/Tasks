@@ -68,14 +68,7 @@ namespace Tasks
 
             void SetDbContextOptions(DbContextOptionsBuilder options)
             {
-                var currentDirectory = Directory.GetCurrentDirectory();
-                Console.WriteLine($"Current Directory: {currentDirectory}");
-
-                // Загружаем переменные из .env файла
-                Env.Load(Path.Combine(currentDirectory, ".env"));
-
                 var connectionstring = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
-
                 options.UseSqlServer(connectionstring);
             }
         }
