@@ -39,6 +39,10 @@ jobs:
         echo "      <aspNetCore processPath=\"dotnet\" arguments=\".\Tasks.dll\" stdoutLogEnabled=\"false\" stdoutLogFile=\".\logs\stdout\" hostingModel=\"inprocess\">" >> publish/web.config
         echo "        <environmentVariables>" >> publish/web.config
         echo "          <environmentVariable name=\"DB_CONNECTION_STRING\" value=\"${{ secrets.DB_CONNECTION_STRING }}\" />" >> publish/web.config
+        echo "          <environmentVariable name=\"FACEBOOK_APP_ID\" value=\"${{ secrets.FACEBOOK_APP_ID }}\" />" >> publish/web.config
+        echo "          <environmentVariable name=\"FACEBOOK_APP_SECRET\" value=\"${{ secrets.FACEBOOK_APP_SECRET }}\" />" >> publish/web.config
+        echo "          <environmentVariable name=\"GOOGLE_APP_ID\" value=\"${{ secrets.GOOGLE_APP_ID }}\" />" >> publish/web.config
+        echo "          <environmentVariable name=\"GOOGLE_APP_SECRET\" value=\"${{ secrets.GOOGLE_APP_SECRET }}\" />" >> publish/web.config
         echo "        </environmentVariables>" >> publish/web.config
         echo "      </aspNetCore>" >> publish/web.config
         echo "    </system.webServer>" >> publish/web.config

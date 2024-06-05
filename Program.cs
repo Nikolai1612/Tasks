@@ -1,11 +1,11 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Tasks.Data;
 using Tasks.Entities;
-using DotNetEnv;
+using Microsoft.AspNetCore.Authentication.Facebook;
+using Microsoft.AspNetCore.Authentication.Google;
 
 namespace Tasks
 {
@@ -22,15 +22,10 @@ namespace Tasks
                 .AddDefaultTokenProviders();
             builder.Services.AddAuthorization(SetAuthorizationOptions);
 
-            //builder.Services.AddAuthentication()
-            //    .AddFacebook(config =>
-            //    {
-            //        config.AppId = builder.Configuration["Authentication:Facebook:AppId"];
-            //        config.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
-            //    });
+            builder.Services.AddAuthentication()
+                .AddFacebook(SetFacebookOptions)
+                .AddGoogle(SetGoogleOptions);
 
-            
-            
             var app = builder.Build();
             app.UseAuthentication();
             app.UseAuthorization();
@@ -70,6 +65,18 @@ namespace Tasks
             {
                 var connectionstring = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
                 options.UseSqlServer(connectionstring);
+            }
+
+            void SetFacebookOptions(FacebookOptions options)
+            {
+                options.AppId = Environment.GetEnvironmentVariable("FACEBOOK_APP_ID");
+                options.AppSecret = Environment.GetEnvironmentVariable("FACEBOOK_APP_SECRET");
+            }
+
+            void SetGoogleOptions(GoogleOptions options)
+            {
+                options.ClientId = Environment.GetEnvironmentVariable("GOOGLE_APP_ID");
+                options.ClientSecret = Environment.GetEnvironmentVariable("GOOGLE_APP_SECRET");
             }
         }
     }

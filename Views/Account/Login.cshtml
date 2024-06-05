@@ -2,7 +2,7 @@
 <h3>
     Login with external provider
 </h3>
-@* <form asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl">
+<form asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl">
     @foreach (var provider in Model.ExternalProviders)
     {
         <button type="submit"
@@ -11,7 +11,7 @@
             @provider.DisplayName
             </button>
         }
-</form> *@
+</form>
 <form asp-action="Login" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input hidden asp-for="ReturnUrl" />
