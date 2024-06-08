@@ -29,28 +29,21 @@ namespace Tasks
                 .AddMicrosoftAccount(SetMicrosoftOptions);
 
             var app = builder.Build();
+
+            app.UseStaticFiles();
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapDefaultControllerRoute();
 
             app.Run();
 
+
+
             void SetAuthorizationOptions(AuthorizationOptions options)
             {
                 options.AddPolicy("Admin", builder =>
                 {
                     builder.RequireClaim(ClaimTypes.Role, "Admin");
-                });
-                options.AddPolicy("Manager", builder =>
-                {
-                    builder.RequireAssertion(x => x.User.HasClaim(ClaimTypes.Role, "Manager")
-                          || x.User.HasClaim(ClaimTypes.Role, "Admin"));
-                });
-                options.AddPolicy("User", builder =>
-                {
-                    builder.RequireAssertion(x => x.User.HasClaim(ClaimTypes.Role, "Manager")
-                          || x.User.HasClaim(ClaimTypes.Role, "Admin") 
-                          || x.User.HasClaim(ClaimTypes.Role,"User"));
                 });
             }
 
