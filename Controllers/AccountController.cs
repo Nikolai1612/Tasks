@@ -52,7 +52,7 @@ namespace Tasks.Controllers
                     if (claimResult.Succeeded)
                     {
                         await signInManager.SignInAsync(user, isPersistent: false);
-                        return Redirect(model.ReturnUrl);
+                        return RedirectToAction("Index", "Home");
                     }
                     model.Roles = roles;
                     return View(model);
@@ -99,7 +99,7 @@ namespace Tasks.Controllers
 
             if (result.Succeeded)
             {
-                return Redirect(model.ReturnUrl);
+                return RedirectToAction("Index", "Home");
             }
             return View(model);
         }
