@@ -67,34 +67,32 @@ namespace Tasks.Controllers
             return View(model);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Login(string returnUrl)
-        {
-            var externalProviders = await signInManager.GetExternalAuthenticationSchemesAsync();
+        //[HttpGet]
+        //public async Task<IActionResult> Login(string returnUrl)
+        //{
+        //    var externalProviders = await signInManager.GetExternalAuthenticationSchemesAsync();
 
-            return View(new LoginViewModel
-            {
-                ReturnUrl = returnUrl,
-                ExternalProviders = externalProviders
-            });
-        }
+        //    return View(new LoginViewModel
+        //    {
+        //        ReturnUrl = returnUrl,
+        //        ExternalProviders = externalProviders
+        //    });
+        //}
 
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                //model.ExternalProviders = await signInManager.GetExternalAuthenticationSchemesAsync();
-                return View(model);
+                return RedirectToAction("Index", "Home");
             }
 
             var user = await userManager.FindByNameAsync(model.Email);
 
             if (user == null)
             {
-                //model.ExternalProviders = await signInManager.GetExternalAuthenticationSchemesAsync();
                 ModelState.AddModelError("", "User not found");
-                return View(model);
+                return PartialView("_LoginModal", model);
             }
 
             var result = await signInManager.PasswordSignInAsync(user, model.Password, false, false);
@@ -103,7 +101,6 @@ namespace Tasks.Controllers
             {
                 return Redirect(model.ReturnUrl);
             }
-            //model.ExternalProviders = await signInManager.GetExternalAuthenticationSchemesAsync();
             return View(model);
         }
 

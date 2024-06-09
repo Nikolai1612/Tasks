@@ -1,5 +1,7 @@
 ﻿@model RegisterViewModel
-
+@{
+    ViewBag.Title = "Register";
+}
 <form asp-action="Register" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input hidden asp-for="ReturnUrl" />
