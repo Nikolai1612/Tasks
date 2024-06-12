@@ -5,9 +5,12 @@ namespace Tasks.Models
 {
     public class LoginViewModel
     {
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
+        [Required]   
+        public string UserName { get; set; }
+
+        //[Required]
+        //[EmailAddress]
+        //public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
@@ -15,10 +18,5 @@ namespace Tasks.Models
 
         [Display(Name ="Remember me?")]
         public bool RememberMe { get; set; }
-
-        [Required]
-        public string ReturnUrl { get; set; }
-
-        public IEnumerable<AuthenticationScheme> ExternalProviders {  get; set; }
     }
 }

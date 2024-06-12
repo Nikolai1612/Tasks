@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
 using Tasks.Entities;
 using Tasks.Models;
@@ -10,12 +9,6 @@ namespace Tasks.Controllers
 {
     public class AccountController : Controller
     {
-        private List<SelectListItem> roles = new List<SelectListItem>
-        {
-            new SelectListItem{Value = "Admin",Text = "Admin"},
-            new SelectListItem{Value = "Manager",Text = "Manager"},
-            new SelectListItem { Value = "User", Text = "User" },
-        };
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
 
@@ -27,35 +20,21 @@ namespace Tasks.Controllers
             this.signInManager = signInManager;
         }
 
-        [HttpGet]
-        public IActionResult Register(string returnUrl)
-        {
-            return View(new RegisterViewModel
-            {
-                ReturnUrl = returnUrl,
-                Roles = roles
-            });
-        }
-
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
                 var result = await userManager.CreateAsync(user,model.Password);
 
                 if (result.Succeeded)
                 {
-                    var claimResult = await userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, model.SelectedRole));
-                    //var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
-                    if (claimResult.Succeeded)
+                    if (result.Succeeded)
                     {
                         await signInManager.SignInAsync(user, isPersistent: false);
-                        return RedirectToAction("Index", "Home");
+                        return Json(new { success = true });
                     }
-                    model.Roles = roles;
-                    return View(model);
                 }
 
                 foreach (var error in result.Errors)
@@ -63,45 +42,22 @@ namespace Tasks.Controllers
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
-            model.Roles = roles;
-            return View(model);
+            return PartialView("_RegisterPartial", model);
         }
-
-        //[HttpGet]
-        //public async Task<IActionResult> Login(string returnUrl)
-        //{
-        //    var externalProviders = await signInManager.GetExternalAuthenticationSchemesAsync();
-
-        //    return View(new LoginViewModel
-        //    {
-        //        ReturnUrl = returnUrl,
-        //        ExternalProviders = externalProviders
-        //    });
-        //}
 
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return RedirectToAction("Index", "Home");
+                var result = await signInManager.PasswordSignInAsync(model.UserName, model.Password, false, false);
+                if (result.Succeeded)
+                {
+                     return Json(new {success = true});
+                }
+                ModelState.AddModelError(string.Empty, "Invalid login attempt");
             }
-
-            var user = await userManager.FindByNameAsync(model.Email);
-
-            if (user == null)
-            {
-                ModelState.AddModelError("", "User not found");
-                return PartialView("_LoginModal", model);
-            }
-
-            var result = await signInManager.PasswordSignInAsync(user, model.Password, false, false);
-
-            if (result.Succeeded)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            return View(model);
+            return PartialView("_LoginPartial", model);
         }
 
         public IActionResult ExternalLogin(string provider, string returnUrl)
