@@ -21,7 +21,7 @@ namespace Tasks.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> SignUp(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -42,11 +42,11 @@ namespace Tasks.Controllers
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
-            return PartialView("_RegisterPartial", model);
+            return PartialView("_SignUpPartial", model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> SignIn(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -57,10 +57,10 @@ namespace Tasks.Controllers
                 }
                 ModelState.AddModelError(string.Empty, "Invalid login attempt");
             }
-            return PartialView("_LoginPartial", model);
+            return PartialView("_SignInPartial", model);
         }
 
-        public IActionResult ExternalLogin(string provider, string returnUrl)
+        public IActionResult ExternalSignIn(string provider, string returnUrl)
         {
             var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { returnUrl });
             var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
@@ -102,7 +102,7 @@ namespace Tasks.Controllers
             var info = await signInManager.GetExternalLoginInfoAsync();
             if (info == null)
             {
-                return RedirectToAction("Login");
+                return Redirect("/");
             }
 
             var user = new ApplicationUser(model.UserName);
@@ -114,7 +114,7 @@ namespace Tasks.Controllers
                 if (identityResult.Succeeded)
                 {
                     await signInManager.SignInAsync(user, false);
-                    return Redirect("/Home/Index");
+                    return Redirect("/");
                 }
             }
 
@@ -126,10 +126,10 @@ namespace Tasks.Controllers
             return View();
         }
 
-        public async Task<IActionResult> LogOff()
+        public async Task<IActionResult> UserSignOut()
         {
             await signInManager.SignOutAsync();
-            return Redirect("/Home/Index");
+            return Redirect("/");
         }
     }
 }
