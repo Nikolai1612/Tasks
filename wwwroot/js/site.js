@@ -9,6 +9,14 @@
     $('#modal').on('shown.bs.modal', function (e) {
         updateModalTitle();
     });
+
+    $('#navbarNav').on('shown.bs.collapse', function () {
+        $('.navbar-toggler-icon').addClass('expanded');
+    });
+
+    $('#navbarNav').on('hidden.bs.collapse', function () {
+        $('.navbar-toggler-icon').removeClass('expanded');
+    });
 });
 
 function attachFormSubmit(formSelector, url) {
@@ -32,6 +40,13 @@ function attachFormSubmit(formSelector, url) {
         });
     });
 }
+
+function changeTogglerIcon() {
+    if ($('.navbar-toggler').hasClass('collapsed')) {
+
+    }
+}
+
 function updateModalTitle() {
     var activeTab = $('#myTab .nav-link.active').attr('id');
     var modalTitle = '';

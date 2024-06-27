@@ -16,13 +16,13 @@
                 </ul>
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="login-tab-pane" role="tabpanel" aria-labelledby="login-tab" tabindex="0">
-                        <partial name="_LoginPartial" />
+                        <partial name="_SignInPartial" />
                     </div>
                     <div class="tab-pane fade" id="register-tab-pane" role="tabpanel" aria-labelledby="register-tab" tabindex="0">
-                        <partial name = "_RegisterPartial" />
+                        <partial name = "_SignUpPartial" />
                     </div>
                 </div>
-                <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnUrl="~/">
+                <form asp-controller="Account" asp-action="ExternalSignIn" asp-route-returnUrl="~/">
                     @foreach (var provider in await SignInManager.GetExternalAuthenticationSchemesAsync())
                     {
                         <button class="close" type="submit"
