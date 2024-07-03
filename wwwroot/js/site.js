@@ -41,12 +41,6 @@ function attachFormSubmit(formSelector, url) {
     });
 }
 
-function changeTogglerIcon() {
-    if ($('.navbar-toggler').hasClass('collapsed')) {
-
-    }
-}
-
 function updateModalTitle() {
     var activeTab = $('#myTab .nav-link.active').attr('id');
     var modalTitle = '';
