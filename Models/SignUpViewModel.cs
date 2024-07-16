@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Tasks.CustomAttributes;
 
 namespace Tasks.Models
 {
-    public class RegisterViewModel
+    public class SignUpViewModel
     {
         [Required]
         [UniqueUserName]
@@ -20,6 +19,7 @@ namespace Tasks.Models
 
         [Required]
         [Display(Name ="Confirm password")]
+        [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage ="The password and confirmation password do not match")]
         public string ConfirmPassword { get; set; }
     }

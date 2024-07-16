@@ -3,14 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Tasks.Models
 {
-    public class LoginViewModel
+    public class SignInViewModel
     {
         [Required]   
         public string UserName { get; set; }
-
-        //[Required]
-        //[EmailAddress]
-        //public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

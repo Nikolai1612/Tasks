@@ -1,26 +1,22 @@
-﻿@model RegisterViewModel
+﻿@model SignUpViewModel
 
-<form class="form-center" id="registerForm" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<form class="form" id="registerForm">
     <div class="form-group">
-        <label asp-for="UserName"></label>
+        <label asp-for="UserName" class="form-label">Username</label>
         <input asp-for="UserName" class="form-control" />
-        <span asp-validation-for="UserName" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="Email"></label>
+        <label asp-for="Email" class="form-label">Email</label>
         <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="Password"></label>
+        <label asp-for="Password" class="form-label">Password</label>
         <input asp-for="Password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="ConfirmPassword"></label>
+        <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label>
         <input asp-for="ConfirmPassword" class="form-control" />
-        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
     </div>
-    <button type="submit" class="btn btn-primary">Sign Up</button>
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <button type="submit" class="btn">Sign Up</button>
 </form>

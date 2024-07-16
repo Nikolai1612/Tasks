@@ -21,7 +21,7 @@ namespace Tasks.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SignUp(RegisterViewModel model)
+        public async Task<IActionResult> SignUp(SignUpViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -30,11 +30,8 @@ namespace Tasks.Controllers
 
                 if (result.Succeeded)
                 {
-                    if (result.Succeeded)
-                    {
-                        await signInManager.SignInAsync(user, isPersistent: false);
-                        return Json(new { success = true });
-                    }
+                    await signInManager.SignInAsync(user, isPersistent: false);
+                    return Json(new { success = true });
                 }
 
                 foreach (var error in result.Errors)
@@ -46,7 +43,7 @@ namespace Tasks.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SignIn(LoginViewModel model)
+        public async Task<IActionResult> SignIn(SignInViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -60,64 +57,71 @@ namespace Tasks.Controllers
             return PartialView("_SignInPartial", model);
         }
 
+        [HttpPost]
         public IActionResult ExternalSignIn(string provider, string returnUrl)
         {
-            var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { returnUrl });
+            var redirectUrl = Url.Action(nameof(ExternalSignInCallback), "Account", new { returnUrl });
             var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
             return Challenge(properties, provider);
         }
 
-        public async Task<IActionResult> ExternalLoginCallback(string returnUrl)
+        public async Task<IActionResult> ExternalSignInCallback(string returnUrl)
         {
-            var info = await signInManager.GetExternalLoginInfoAsync();
+            var info = await signInManager.GetExternalLoginInfoAsync(); 
             if (info == null)
             {
-                return RedirectToAction("Login");
+                return Redirect(returnUrl);
             }
 
             var result = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false, false);
             if (result.Succeeded)
             {
-                return Redirect("/Home/Index");
+                return Redirect(returnUrl);
             }
 
-            return RedirectToAction("RegisterExternal", new ExternalLoginViewModel
+            return RedirectToAction("SignUpExternal", new ExternalSignUpViewModel  
             {
                 ReturnUrl = returnUrl,
-                UserName = info.Principal.FindFirstValue(ClaimTypes.Name)
+                UserName = info.Principal.FindFirstValue(ClaimTypes.GivenName)
             });
         }
 
         [HttpGet]
-        public IActionResult RegisterExternal(ExternalLoginViewModel model)
+        public IActionResult SignUpExternal(ExternalSignUpViewModel model)
         {
             return View(model);
         }
 
         [AllowAnonymous]
         [HttpPost]
-        [ActionName("RegisterExternal")]
-        public async Task<IActionResult> RegisterExternalConfirmed(ExternalLoginViewModel model)
+        [ActionName("SignUpExternal")]
+        public async Task<IActionResult> SignUpExternalConfirmed(ExternalSignUpViewModel model)
         {
-            var info = await signInManager.GetExternalLoginInfoAsync();
-            if (info == null)
+            if (ModelState.IsValid)
             {
-                return Redirect("/");
-            }
-
-            var user = new ApplicationUser(model.UserName);
-
-            var result = await userManager.CreateAsync(user);
-            if (result.Succeeded)
-            {
-                var identityResult = await userManager.AddLoginAsync(user, info);
-                if (identityResult.Succeeded)
+                var info = await signInManager.GetExternalLoginInfoAsync();
+                if (info == null)
                 {
-                    await signInManager.SignInAsync(user, false);
-                    return Redirect("/");
+                    return Redirect(model.ReturnUrl);
+                }
+
+                var user = new ApplicationUser(model.UserName);
+
+                var result = await userManager.CreateAsync(user);
+                if (result.Succeeded)
+                {
+                    var identityResult = await userManager.AddLoginAsync(user, info);
+                    if (identityResult.Succeeded)
+                    {
+                        await signInManager.SignInAsync(user, false);
+                        return Redirect(model.ReturnUrl);
+                    }
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
-
             return View(model);
         }
 

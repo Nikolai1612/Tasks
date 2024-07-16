@@ -6,10 +6,10 @@
         </a>
         <ul class="dropdown-menu">
 
-            <li><a class="dropdown-item text-dark" asp-controller="Account" asp-action="Manage" title="Manage">Manage</a></li>
+            <li><a class="dropdown-item" asp-controller="Account" asp-action="Manage" title="Manage">Manage</a></li>
             <li><hr class="dropdown-divider"></li>
             <li>
-                <a class="dropdown-item text-dark" asp-controller="Account" asp-action="UserSignOut" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">Sign Out</a>
+                <a class="dropdown-item" asp-controller="Account" asp-action="UserSignOut" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">Sign Out</a>
             </li>
         </ul>
     </li>

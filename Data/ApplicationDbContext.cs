@@ -11,21 +11,5 @@ namespace Tasks.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
-
-        //protected override  void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    //var user = new ApplicationUser
-        //    //{
-        //    //    UserName = "User",
-        //    //    LastName = "LastName",
-        //    //    FirstName = "FirstName"
-        //    //};
-        //    //var manager = provider.GetService < UserManager<ApplicationUser>>();
-        //    //var result = await manager.CreateAsync(user, "123qwe");
-        //    //if(result.Succeeded)
-        //    //{
-        //    //    await manager.AddClaimAsync(user, new Claim(ClaimTypes.Role, "Admin"));
-        //    //}
-        //}
     }
 }

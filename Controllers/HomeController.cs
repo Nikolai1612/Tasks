@@ -10,20 +10,7 @@ namespace Tasks.Controllers
             return View();
         }
 
-        [Authorize(Policy ="Admin")]
-        public IActionResult Admin()
-        {
-            return View();
-        }
-
-        [Authorize(Policy ="User")]
-        public IActionResult UserPage()
-        {
-            return View();
-        }
-
-        [Authorize]
-        public IActionResult Privacy()
+        public IActionResult Page()
         {
             return View();
         }
