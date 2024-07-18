@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tasks.Data;
 
@@ -11,9 +12,11 @@ using Tasks.Data;
 namespace Tasks.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240717001544_CreateTaskTable")]
+    partial class CreateTaskTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace Tasks.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("ApplicationTaskTag", b =>
-                {
-                    b.Property<int>("TagsTagId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TasksId")
-                        .HasColumnType("int");
-
-                    b.HasKey("TagsTagId", "TasksId");
-
-                    b.HasIndex("TasksId");
-
-                    b.ToTable("ApplicationTaskTag");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
@@ -182,12 +170,10 @@ namespace Tasks.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TopicId")
-                        .HasColumnType("int");
+                    b.Property<string>("Topic")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TopicId");
 
                     b.ToTable("Tasks");
                 });
@@ -266,11 +252,11 @@ namespace Tasks.Migrations
 
             modelBuilder.Entity("Tasks.Entities.Image", b =>
                 {
-                    b.Property<int>("ImageId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ImageId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("ApplicationTaskId")
                         .HasColumnType("int");
@@ -278,7 +264,7 @@ namespace Tasks.Migrations
                     b.Property<string>("Url")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ImageId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ApplicationTaskId");
 
@@ -287,11 +273,11 @@ namespace Tasks.Migrations
 
             modelBuilder.Entity("Tasks.Entities.Solution", b =>
                 {
-                    b.Property<int>("SolutionId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SolutionId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Answer")
                         .HasColumnType("nvarchar(max)");
@@ -299,7 +285,7 @@ namespace Tasks.Migrations
                     b.Property<int?>("ApplicationTaskId")
                         .HasColumnType("int");
 
-                    b.HasKey("SolutionId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ApplicationTaskId");
 
@@ -308,49 +294,23 @@ namespace Tasks.Migrations
 
             modelBuilder.Entity("Tasks.Entities.Tag", b =>
                 {
-                    b.Property<int>("TagId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TagId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ApplicationTaskId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("TagId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationTaskId");
 
                     b.ToTable("Tags");
-                });
-
-            modelBuilder.Entity("Tasks.Entities.Topic", b =>
-                {
-                    b.Property<int>("TopicId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TopicId"));
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("TopicId");
-
-                    b.ToTable("Topics");
-                });
-
-            modelBuilder.Entity("ApplicationTaskTag", b =>
-                {
-                    b.HasOne("Tasks.Entities.Tag", null)
-                        .WithMany()
-                        .HasForeignKey("TagsTagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Tasks.Entities.ApplicationTask", null)
-                        .WithMany()
-                        .HasForeignKey("TasksId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -404,15 +364,6 @@ namespace Tasks.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Tasks.Entities.ApplicationTask", b =>
-                {
-                    b.HasOne("Tasks.Entities.Topic", "Topic")
-                        .WithMany()
-                        .HasForeignKey("TopicId");
-
-                    b.Navigation("Topic");
-                });
-
             modelBuilder.Entity("Tasks.Entities.Image", b =>
                 {
                     b.HasOne("Tasks.Entities.ApplicationTask", null)
@@ -427,11 +378,20 @@ namespace Tasks.Migrations
                         .HasForeignKey("ApplicationTaskId");
                 });
 
+            modelBuilder.Entity("Tasks.Entities.Tag", b =>
+                {
+                    b.HasOne("Tasks.Entities.ApplicationTask", null)
+                        .WithMany("Tags")
+                        .HasForeignKey("ApplicationTaskId");
+                });
+
             modelBuilder.Entity("Tasks.Entities.ApplicationTask", b =>
                 {
                     b.Navigation("Images");
 
                     b.Navigation("Solutions");
+
+                    b.Navigation("Tags");
                 });
 #pragma warning restore 612, 618
         }

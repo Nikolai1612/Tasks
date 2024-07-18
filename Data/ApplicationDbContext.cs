@@ -11,5 +11,11 @@ namespace Tasks.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
+
+        public DbSet<ApplicationTask> Tasks { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<Solution> Solutions { get; set; }
+        public DbSet<Image> Images { get; set; }
+        public DbSet<Topic> Topics { get; set; }
     }
 }
