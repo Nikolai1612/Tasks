@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tasks.Data;
 
@@ -11,9 +12,11 @@ using Tasks.Data;
 namespace Tasks.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240720125614_Add_Image")]
+    partial class Add_Image
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -275,27 +278,6 @@ namespace Tasks.Migrations
                     b.ToTable("Images");
                 });
 
-            modelBuilder.Entity("Tasks.Entities.Solution", b =>
-                {
-                    b.Property<int>("SolutionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SolutionId"));
-
-                    b.Property<string>("Answer")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TaskId")
-                        .HasColumnType("int");
-
-                    b.HasKey("SolutionId");
-
-                    b.HasIndex("TaskId");
-
-                    b.ToTable("Solutions");
-                });
-
             modelBuilder.Entity("Tasks.Entities.Topic", b =>
                 {
                     b.Property<int>("TopicId")
@@ -320,12 +302,10 @@ namespace Tasks.Migrations
                     b.Property<int>("TaskId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SolutionId")
-                        .HasColumnType("int");
+                    b.Property<string>("Answer")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId", "TaskId");
-
-                    b.HasIndex("SolutionId");
 
                     b.HasIndex("TaskId");
 
@@ -388,7 +368,7 @@ namespace Tasks.Migrations
                     b.HasOne("Tasks.Entities.ApplicationUser", "Creator")
                         .WithMany("CreatedTasks")
                         .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Tasks.Entities.Topic", "Topic")
@@ -413,29 +393,12 @@ namespace Tasks.Migrations
                     b.Navigation("Task");
                 });
 
-            modelBuilder.Entity("Tasks.Entities.Solution", b =>
-                {
-                    b.HasOne("Tasks.Entities.ApplicationTask", "Task")
-                        .WithMany("Solutions")
-                        .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Task");
-                });
-
             modelBuilder.Entity("Tasks.Entities.UserTaskSolution", b =>
                 {
-                    b.HasOne("Tasks.Entities.Solution", "Solution")
-                        .WithMany("UserTaskSolutions")
-                        .HasForeignKey("SolutionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("Tasks.Entities.ApplicationTask", "Task")
                         .WithMany("Solvers")
                         .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Tasks.Entities.ApplicationUser", "User")
@@ -443,8 +406,6 @@ namespace Tasks.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Solution");
 
                     b.Navigation("Task");
 
@@ -455,8 +416,6 @@ namespace Tasks.Migrations
                 {
                     b.Navigation("Images");
 
-                    b.Navigation("Solutions");
-
                     b.Navigation("Solvers");
                 });
 
@@ -465,11 +424,6 @@ namespace Tasks.Migrations
                     b.Navigation("CreatedTasks");
 
                     b.Navigation("SolvedTasks");
-                });
-
-            modelBuilder.Entity("Tasks.Entities.Solution", b =>
-                {
-                    b.Navigation("UserTaskSolutions");
                 });
 
             modelBuilder.Entity("Tasks.Entities.Topic", b =>

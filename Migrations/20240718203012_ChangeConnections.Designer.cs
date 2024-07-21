@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tasks.Data;
 
@@ -11,9 +12,11 @@ using Tasks.Data;
 namespace Tasks.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240718203012_ChangeConnections")]
+    partial class ChangeConnections
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,21 @@ namespace Tasks.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("ApplicationTaskTag", b =>
+                {
+                    b.Property<int>("TagsTagId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TasksId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TagsTagId", "TasksId");
+
+                    b.HasIndex("TasksId");
+
+                    b.ToTable("ApplicationTaskTag");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
@@ -155,13 +173,16 @@ namespace Tasks.Migrations
 
             modelBuilder.Entity("Tasks.Entities.ApplicationTask", b =>
                 {
-                    b.Property<int>("TaskId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TaskId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid>("CreatorId")
+                    b.Property<Guid?>("ApplicationUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ApplicationUserId1")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
@@ -173,9 +194,11 @@ namespace Tasks.Migrations
                     b.Property<int>("TopicId")
                         .HasColumnType("int");
 
-                    b.HasKey("TaskId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("CreatorId");
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("ApplicationUserId1");
 
                     b.HasIndex("TopicId");
 
@@ -262,7 +285,7 @@ namespace Tasks.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ImageId"));
 
-                    b.Property<int>("TaskId")
+                    b.Property<int?>("ApplicationTaskId")
                         .HasColumnType("int");
 
                     b.Property<string>("Url")
@@ -270,9 +293,35 @@ namespace Tasks.Migrations
 
                     b.HasKey("ImageId");
 
-                    b.HasIndex("TaskId");
+                    b.HasIndex("ApplicationTaskId");
 
                     b.ToTable("Images");
+                });
+
+            modelBuilder.Entity("Tasks.Entities.Rating", b =>
+                {
+                    b.Property<int>("RatingId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RatingId"));
+
+                    b.Property<int>("TaskId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("int");
+
+                    b.HasKey("RatingId");
+
+                    b.HasIndex("TaskId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Ratings");
                 });
 
             modelBuilder.Entity("Tasks.Entities.Solution", b =>
@@ -286,14 +335,30 @@ namespace Tasks.Migrations
                     b.Property<string>("Answer")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TaskId")
+                    b.Property<int?>("ApplicationTaskId")
                         .HasColumnType("int");
 
                     b.HasKey("SolutionId");
 
-                    b.HasIndex("TaskId");
+                    b.HasIndex("ApplicationTaskId");
 
                     b.ToTable("Solutions");
+                });
+
+            modelBuilder.Entity("Tasks.Entities.Tag", b =>
+                {
+                    b.Property<int>("TagId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TagId"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TagId");
+
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("Tasks.Entities.Topic", b =>
@@ -312,24 +377,19 @@ namespace Tasks.Migrations
                     b.ToTable("Topics");
                 });
 
-            modelBuilder.Entity("Tasks.Entities.UserTaskSolution", b =>
+            modelBuilder.Entity("ApplicationTaskTag", b =>
                 {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.HasOne("Tasks.Entities.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsTagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<int>("TaskId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SolutionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "TaskId");
-
-                    b.HasIndex("SolutionId");
-
-                    b.HasIndex("TaskId");
-
-                    b.ToTable("UserTaskSolutions");
+                    b.HasOne("Tasks.Entities.ApplicationTask", null)
+                        .WithMany()
+                        .HasForeignKey("TasksId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -385,91 +445,72 @@ namespace Tasks.Migrations
 
             modelBuilder.Entity("Tasks.Entities.ApplicationTask", b =>
                 {
-                    b.HasOne("Tasks.Entities.ApplicationUser", "Creator")
+                    b.HasOne("Tasks.Entities.ApplicationUser", null)
                         .WithMany("CreatedTasks")
-                        .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("Tasks.Entities.ApplicationUser", null)
+                        .WithMany("SolvedTasks")
+                        .HasForeignKey("ApplicationUserId1");
 
                     b.HasOne("Tasks.Entities.Topic", "Topic")
                         .WithMany("Tasks")
                         .HasForeignKey("TopicId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Creator");
 
                     b.Navigation("Topic");
                 });
 
             modelBuilder.Entity("Tasks.Entities.Image", b =>
                 {
-                    b.HasOne("Tasks.Entities.ApplicationTask", "Task")
+                    b.HasOne("Tasks.Entities.ApplicationTask", null)
                         .WithMany("Images")
-                        .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Task");
+                        .HasForeignKey("ApplicationTaskId");
                 });
 
-            modelBuilder.Entity("Tasks.Entities.Solution", b =>
+            modelBuilder.Entity("Tasks.Entities.Rating", b =>
                 {
                     b.HasOne("Tasks.Entities.ApplicationTask", "Task")
-                        .WithMany("Solutions")
+                        .WithMany("Ratings")
                         .HasForeignKey("TaskId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Task");
-                });
-
-            modelBuilder.Entity("Tasks.Entities.UserTaskSolution", b =>
-                {
-                    b.HasOne("Tasks.Entities.Solution", "Solution")
-                        .WithMany("UserTaskSolutions")
-                        .HasForeignKey("SolutionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Tasks.Entities.ApplicationTask", "Task")
-                        .WithMany("Solvers")
-                        .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Tasks.Entities.ApplicationUser", "User")
-                        .WithMany("SolvedTasks")
+                        .WithMany("Ratings")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Solution");
 
                     b.Navigation("Task");
 
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Tasks.Entities.Solution", b =>
+                {
+                    b.HasOne("Tasks.Entities.ApplicationTask", null)
+                        .WithMany("Solutions")
+                        .HasForeignKey("ApplicationTaskId");
+                });
+
             modelBuilder.Entity("Tasks.Entities.ApplicationTask", b =>
                 {
                     b.Navigation("Images");
 
-                    b.Navigation("Solutions");
+                    b.Navigation("Ratings");
 
-                    b.Navigation("Solvers");
+                    b.Navigation("Solutions");
                 });
 
             modelBuilder.Entity("Tasks.Entities.ApplicationUser", b =>
                 {
                     b.Navigation("CreatedTasks");
 
-                    b.Navigation("SolvedTasks");
-                });
+                    b.Navigation("Ratings");
 
-            modelBuilder.Entity("Tasks.Entities.Solution", b =>
-                {
-                    b.Navigation("UserTaskSolutions");
+                    b.Navigation("SolvedTasks");
                 });
 
             modelBuilder.Entity("Tasks.Entities.Topic", b =>
