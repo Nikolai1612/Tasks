@@ -10,39 +10,42 @@
     <link rel ="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar fixed-top navbar-expand-sm border-bottom box-shadow bg-turquoise">
-            <div class="container-fluid">
-                <a class="navbar-brand logo-brand" asp-controller="Home" asp-action="Index"></a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav flex-grow-1 justify-content-end">
-                        <li class="nav-item mx-sm-15px">
-                            <a class="nav-link nowrap" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item mx-sm-15px">
-                            <a class="nav-link nowrap" asp-controller="Home" asp-action="Page">Page</a>
-                        </li>
-                        <partial name="_AccountPartial" /> 
-                    </ul>
-                    <form class="d-flex form-search bg-blue" role="search">
-                        <input class="form-control input-search" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-search" type="submit"></button>
-                    </form>
+    <div class="page">
+        <header>
+            <nav class="navbar fixed-top navbar-expand-sm border-bottom box-shadow bg-turquoise">
+                <div class="container-fluid">
+                    <a class="navbar-brand logo-brand" asp-controller="Home" asp-action="Index"></a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav flex-grow-1 justify-content-end">
+                            <li class="nav-item mx-sm-15px">
+                                <a class="nav-link nowrap" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                            <li class="nav-item mx-sm-15px">
+                                <a class="nav-link nowrap" asp-controller="Home" asp-action="Page">Page</a>
+                            </li>
+                            <partial name="_AccountPartial" />
+                        </ul>
+                        <form class="d-flex form-search bg-blue" role="search">
+                            <input class="form-control input-search" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-search" type="submit"></button>
+                        </form>
+                    </div>
                 </div>
+            </nav>
+        </header>
+
+        <partial name="_AccountModal" model="@ViewBag.LoginModel" />
+        <div class="full-screen py-5">
+            <div class="container">
+                <main role="main" class="pb-3 pt-5 mt-5">
+                    @RenderBody()
+                </main>
             </div>
-        </nav>
-    </header>
-
-    <partial name="_AccountModal" model="@ViewBag.LoginModel" />
-
-    <div class="container">
-        <main role="main" class="pb-3 pt-5 mt-5">
-            @RenderBody()
-        </main>
+        </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

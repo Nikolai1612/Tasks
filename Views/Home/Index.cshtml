@@ -1,64 +1,26 @@
 ﻿@{
     ViewBag.Title = "Home";
 }
-<div class="text-center">
-    <h1>Home</h1>
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
-                <h2>latest tasks</h2>
-                <ul class="task-list list-group mt-4">
-                    <a href="#" class="list-group-item task-item">
-                        <img src="~/img/tasks_icon.png" alt="Task Image">
-                        <div class="task-info">
+<div class="row text-center">
+    <div class="col-12">
+        <h2>latest tasks</h2>
+        <div class="task-list list-group m-4">
+            @for (int i = 0; i < 10; i++)
+            {
+                <a href="#" class="list-group-item task-item my-3">
+                    <img src="~/img/pngtree-notepad-mission-icon-task-item-with-pencil-for-game-png-image_3798455.jpg" alt="Task Image">
+                    <div class="task-info">
+                        <div class="task-info-head">
                             <h5>Task name</h5>
-                            <p class="text-muted">Тема: Геометрия</p>
-                            <p title="Description At that pillared be mirth to have who parasites noontide his before ever dwell or revel weary heralds to me">Description At that pillared be mirth to have who parasites noontide his before ever dwell or revel weary heralds to me</p>
+                            <div class="task-rating">
+                                &#9733;&#9733;&#9733;&#9733;&#9734; (4.0)
+                            </div>
                         </div>
-                        <div class="task-rating">
-                            &#9733;&#9733;&#9733;&#9733;&#9734; (4.0)
-                        </div>
-                    </a>
-                    <a href="#" class="list-group-item task-item">
-                        <img src="~/img/tasks_icon.png" alt="Task Image">
-                        <div class="task-info">
-                            <h5>Task name</h5>
-                            <p class="text-muted">Тема: Геометрия</p>
-                            <p title="Description At that pillared be mirth to have who parasites noontide his before ever dwell or revel weary heralds to me">Description At that pillared be mirth to have who parasites noontide his before ever dwell or revel weary heralds to me</p>
-                        </div>
-                        <div class="task-rating">
-                            &#9733;&#9733;&#9733;&#9733;&#9734; (4.0)
-                        </div>
-                    </a>
-                </ul>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
-                <h2>top tasks</h2>
-                <ul class="task-list list-group mt-4">
-                    <a href="#" class="list-group-item task-item">
-                        <img src="~/img/tasks_icon.png" alt="Task Image">
-                        <div class="task-info">
-                            <h5>Task name</h5>
-                            <p class="text-muted">Тема: Геометрия</p>
-                            <p title="Description At that pillared be mirth to have who parasites noontide his before ever dwell or revel weary heralds to me">Description At that pillared be mirth to have who parasites noontide his before ever dwell or revel weary heralds to me</p>
-                        </div>
-                        <div class="task-rating">
-                            &#9733;&#9733;&#9733;&#9733;&#9734; (4.0)
-                        </div>
-                    </a>
-                    <a href="#" class="list-group-item task-item">
-                        <img src="~/img/tasks_icon.png" alt="Task Image">
-                        <div class="task-info">
-                            <h5>Task name</h5>
-                            <p class="text-muted">Тема: Геометрия</p>
-                            <p title="Description At that pillared be mirth to have who parasites noontide his before ever dwell or revel weary heralds to me">Description At that pillared be mirth to have who parasites noontide his before ever dwell or revel weary heralds to me</p>
-                        </div>
-                        <div class="task-rating">
-                            &#9733;&#9733;&#9733;&#9733;&#9734; (4.0)
-                        </div>
-                    </a>
-                </ul>
-            </div>
+                        <p title="Description At that pillared be mirth to have who parasites noontide his before ever dwell or revel weary heralds to me">Description At that pillared be mirth to have who parasites noontide his before ever dwell or revel weary heralds to me</p>
+                        <p class="text-muted">Topic: C#</p>
+                    </div>
+                </a>
+            }
         </div>
     </div>
 </div>

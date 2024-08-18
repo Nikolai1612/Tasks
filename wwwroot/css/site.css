@@ -12,12 +12,20 @@
  
 html {
     position: relative;
-    min-height: 100%;
+    height: 100%;
     font-size: 14px;
 }
 
 body {
   margin-bottom: 60px;
+  height:100%;
+  overflow:hidden;
+}
+
+.page{
+    display:flex;
+    flex-direction:column;
+    height:100%;
 }
 
 .btn {
@@ -277,22 +285,22 @@ select:-webkit-autofill:focus {
     color: var(--gray-color);
 }
 
-.task-item {
+.task-list .task-item {
     display: flex;
-    align-items: center;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    align-items:flex-start;
+    border: 4px solid var(--blue-color);
+    border-radius: 15px;
     margin-bottom: 15px;
-    padding: 10px;
     text-decoration: none;
     color: inherit;
-    height: 150px; /* Ограничиваем высоту блока задачи */
+    height: 110px;
+    padding: 2px;
 }
 
 .task-item img {
-    max-width: 100px;
+    height:100%;
     margin-right: 15px;
-    border-radius: 8px;
+    border-radius:10px;
 }
 
 .task-item .task-info {
@@ -307,14 +315,26 @@ select:-webkit-autofill:focus {
 
 .task-item p {
     margin-bottom: 5px;
-    white-space: nowrap; /* Отключаем перенос текста */
-    overflow: hidden; /* Обрезаем текст, который не влезает */
-    text-overflow: ellipsis; /* Добавляем троеточие */
+    white-space: nowrap;
+    overflow: hidden; 
+    text-overflow: ellipsis; 
 }
 
 .task-item .task-rating {
     font-weight: bold;
-    margin-left: auto; /* Отодвигаем рейтинг вправо */
+    margin-left: auto;
+}
+
+.task-info-head{
+    display:flex;
+
+}
+
+.full-screen {
+    height: calc(100% - 55px);
+    margin-top:55px;
+    overflow-y: auto;
+    flex: 1 1 auto;
 }
 
 /*custom-classes*/
