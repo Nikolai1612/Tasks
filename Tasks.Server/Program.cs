@@ -16,7 +16,7 @@ namespace Tasks
         {
             var builder = WebApplication.CreateBuilder();
 
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllers();
             builder.Services.AddDbContext<ApplicationDbContext>(SetDbContextOptions);
             builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(SetIdentityOPtions)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
