@@ -17,10 +17,13 @@ namespace Tasks
             var builder = WebApplication.CreateBuilder();
 
             builder.Services.AddControllers();
+            builder.Services.AddSwaggerGen();
+
             builder.Services.AddDbContext<ApplicationDbContext>(SetDbContextOptions);
             builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(SetIdentityOPtions)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
             builder.Services.AddAuthorization(SetAuthorizationOptions);
 
             builder.Services.AddAuthentication()
@@ -28,15 +31,33 @@ namespace Tasks
                 .AddGoogle(SetGoogleOptions)
                 .AddMicrosoftAccount(SetMicrosoftOptions);
 
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+                options.LoginPath = "/account/sign-in";
+                options.AccessDeniedPath = "/account/accessdenied";
+                options.SlidingExpiration = true;
+
+            });
+
             var app = builder.Build();
 
             app.UseStaticFiles();
+
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
+
             app.UseAuthentication();
             app.UseAuthorization();
-            app.MapDefaultControllerRoute();
+
+            app.MapFallbackToFile("index.html");
 
             app.Run();
-
 
 
             void SetAuthorizationOptions(AuthorizationOptions options)

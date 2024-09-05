@@ -3,7 +3,7 @@ using Tasks.CustomAttributes;
 
 namespace Tasks.Models
 {
-    public class ExternalSignUpViewModel
+    public class ExternalSignUpModel
     {
         [Required]
         [UniqueUserName]

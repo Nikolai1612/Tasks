@@ -7,6 +7,7 @@ using Tasks.Models;
 
 namespace Tasks.Controllers
 {
+    [Route("[controller]")]
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
@@ -20,44 +21,43 @@ namespace Tasks.Controllers
             this.signInManager = signInManager;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> SignUp(SignUpViewModel model)
+        [HttpPost("sign-up")]
+        public async Task<IActionResult> SignUp([FromBody] SignUpModel model)
         {
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
-                var result = await userManager.CreateAsync(user,model.Password);
+                var result = await userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
                 {
                     await signInManager.SignInAsync(user, isPersistent: false);
-                    return Json(new { success = true });
+                    return Ok(new { message = "User registered successfully!" });
                 }
-
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
-            return PartialView("_SignUpPartial", model);
+            return BadRequest(ModelState);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> SignIn(SignInViewModel model)
+        [HttpPost("sign-in")]
+        public async Task<IActionResult> SignIn([FromBody] SignInModel model)
         {
             if (ModelState.IsValid)
             {
                 var result = await signInManager.PasswordSignInAsync(model.UserName, model.Password, false, false);
                 if (result.Succeeded)
                 {
-                     return Json(new {success = true});
+                    return Ok(new { message = "User logged successfully!" });
                 }
-                ModelState.AddModelError(string.Empty, "Invalid login attempt");
+                return Unauthorized(new { message = "Invalid login attempt." });
             }
-            return PartialView("_SignInPartial", model);
+            return BadRequest(ModelState);
         }
 
-        [HttpPost]
+        [HttpGet("external-sign-in")]
         public IActionResult ExternalSignIn(string provider, string returnUrl)
         {
             var redirectUrl = Url.Action(nameof(ExternalSignInCallback), "Account", new { returnUrl });
@@ -65,6 +65,7 @@ namespace Tasks.Controllers
             return Challenge(properties, provider);
         }
 
+        [HttpGet("external-sign-in-callback")]
         public async Task<IActionResult> ExternalSignInCallback(string returnUrl)
         {
             var info = await signInManager.GetExternalLoginInfoAsync(); 
@@ -79,7 +80,7 @@ namespace Tasks.Controllers
                 return Redirect(returnUrl);
             }
 
-            return RedirectToAction("SignUpExternal", new ExternalSignUpViewModel  
+            return RedirectToAction("SignUpExternal", new ExternalSignUpModel  
             {
                 ReturnUrl = returnUrl,
                 UserName = info.Principal.FindFirstValue(ClaimTypes.GivenName)
@@ -87,7 +88,7 @@ namespace Tasks.Controllers
         }
 
         [HttpGet]
-        public IActionResult SignUpExternal(ExternalSignUpViewModel model)
+        public IActionResult SignUpExternal(ExternalSignUpModel model)
         {
             return View(model);
         }
@@ -95,7 +96,7 @@ namespace Tasks.Controllers
         [AllowAnonymous]
         [HttpPost]
         [ActionName("SignUpExternal")]
-        public async Task<IActionResult> SignUpExternalConfirmed(ExternalSignUpViewModel model)
+        public async Task<IActionResult> SignUpExternalConfirmed(ExternalSignUpModel model)
         {
             if (ModelState.IsValid)
             {
@@ -125,15 +126,17 @@ namespace Tasks.Controllers
             return View(model);
         }
 
+        [HttpGet("accessdenied")]
         public IActionResult AccessDenied()
         {
             return View();
         }
 
+        [HttpPost("sign-out")]
         public async Task<IActionResult> UserSignOut()
         {
             await signInManager.SignOutAsync();
-            return Redirect("/");
+            return Ok();
         }
     }
 }

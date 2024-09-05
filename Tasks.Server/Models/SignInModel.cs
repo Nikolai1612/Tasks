@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Tasks.Models
 {
-    public class SignInViewModel
+    public class SignInModel
     {
         [Required]   
         public string UserName { get; set; }
