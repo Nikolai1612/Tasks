@@ -56,7 +56,7 @@ jobs:
       run: dotnet test --no-restore --verbosity normal
 
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: web-app
         path: |
